@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title></title>
+  <meta charset="utf-8" />
+  <script src="sf2synth.min.js"></script>
+</head>
+
+<script>
+  var url = './A320U.sf2';
+  // BiquadFilterType
+  // https://developer.mozilla.org/en-US/docs/Web/API/BiquadFilterNode/type
+
+  // PanningModelType
+  // https://developer.mozilla.org/en-US/docs/Web/API/PannerNode/panningModel
+
+  var wml = new SoundFont.WebMidiLink();
+  wml.setLoadCallback(function (arraybuffer) {
+    // ロード完了時の処理
+  });
+  wml.setup(url);
+</script>
+
+<body>
+  <h2>SoundFont: A320U</h2>
+  <pre>
+  Copyright 2005 by Milton Paredes
+  Released under GNU GPL v2, see /usr/share/soundfonts/COPYING
+</pre>
+
+</body>
+
+</html>

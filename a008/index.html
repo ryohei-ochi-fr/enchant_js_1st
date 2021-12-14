@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>MIDI Player</title>
+    <meta charset="utf-8" />
+    <script src="smfplayer.min.js"></script>
+</head>
+
+<script>
+    var player = new SMF.Player();
+
+    window.addEventListener('DOMContentLoaded', function () {
+        /** @type {boolean} */
+        var loop = false;
+        /** @type {boolean} */
+        var cc111 = false;
+        /** @type {boolean} */
+        var falcom = false;
+        /** @type {boolean} */
+        var mfi = false;
+        /** @type {number} */
+        var tempo = 1.0;
+        /** @type {number} 0-16383 */
+        var volume = 16383 * 0.5;
+
+        // player settings
+        player.setLoop(loop); // Player Loop
+        player.setCC111Loop(cc111); // CC#111 Loop
+        player.setFalcomLoop(falcom); // Ys2 Eternal Loop
+        player.setMFiLoop(mfi); // MFi Loop
+        player.setTempoRate(tempo); // Playback tempo rate
+        player.setMasterVolume(volume); // Master Volume
+        // player.setWebMidiLink('http://www.g200kg.com/en/docs/gmplayer/');
+        player.setWebMidiLink('./wml.html');
+
+        // load standard MIDI file
+        loadSMF('Hatsune_Miku_Tell_Your_World.mid');
+    }, false);
+
+    // サウンドフォントのロードが終わったらMIDIを読み込む
+    function loadedWml() {
+        loadSMF('Hatsune_Miku_Tell_Your_World.mid');
+    }
+
+    /**
+     * @param {string} url
+     */
+    function loadSMF(url) {
+        var xhr = new XMLHttpRequest();
+
+        xhr.open('GET', url, true);
+        xhr.addEventListener('load', function (event) {
+            /** @type {Uint8Array} */
+            var input = new Uint8Array(event.target.response);
+
+            // load MIDI file
+            player.loadMidiFile(input);
+            
+            // 再生ボタンを有効にする
+            // player.play();
+            document.getElementById("divLoading").style.display="none";
+            document.getElementById("btnPlay").removeAttribute("disabled");
+
+        }, false);
+        xhr.responseType = 'arraybuffer';
+        xhr.send();
+    }
+
+    function play() {
+        player.play();
+        document.getElementById("btnStop").removeAttribute("disabled");
+        document.getElementById("btnPlay").setAttribute("disabled", true);
+    }
+
+    function stop() {
+        player.stop();
+        document.getElementById("btnPlay").removeAttribute("disabled");
+        document.getElementById("btnStop").setAttribute("disabled", true);
+    }
+
+</script>
+
+<body>
+
+    <header>
+        <h1>MIDI Player</h1>
+    </header>
+    <div id="divLoading">Now Loading...</div>
+    <div><button type=button id="btnPlay" disabled=true onclick="play();">Play</button></div>
+    <div><button type=button id="btnStop" disabled=true onclick="stop();">Stop</button></div>
+
+</body>
+
+</html>
