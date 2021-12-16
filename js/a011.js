@@ -1,29 +1,46 @@
-//おまじない
+// require.config({
+//     paths: {
+//     // 'enchant': 'inc/enchant.js',
+//     'midi': 'https://unpkg.com/@tonejs/midi',
+//     }
+// });
+
+
+// require(['https://unpkg.com/@tonejs/midi'], function (sub) {
+// 	let i;
+// 	const midi = sub.Midi.fromUrl("midi/001_Hatsune_Miku_Tell_Your_World_short.mid")
+// 	// midi = new sub.Midi()
+// });
+
+
+
+// require(['inc/enchant.js'], function () {
+// 	let i;
+// 	enchant();
+// 	var game = new Game(320, 320);
+// 	game.onload = function () {
+// 		game.rootScene.addChild(new Label('Hello, world!'));
+// 	};
+// 	game.start();
+// });
+
+
+//import { Midi } from 'inc/Midi.js';
+
+
+// おまじない
 enchant();
 
 //変数宣言
 var game;
 
-async function fetchData() {
-	console.log("loading midi");
-	var smf = "midi/001_Hatsune_Miku_Tell_Your_World_short.mid";
-	const midi = await Midi.fromUrl(smf);
-
-	// const midiData = fs.readFileSync("test.mid")
-	// const midi = new Midi(midiData)
-
-	console.log("loaded midi");
-};
-
-console.log("load midi");
-fetchData();
-
-
 //Webページが読み込まれたら
 addEventListener('load', function () {
 
-	// console.log("load midi");
+	console.log("load midi");
 	// fetchData();
+	// import Midi from 'inc/Midi.mjs';
+	const midi = Midi.fromUrl("midi/001_Hatsune_Miku_Tell_Your_World_short.mid")
 
 	//ゲームオブジェクトの作成
 	var game = new Game(640, 360);
@@ -35,10 +52,6 @@ addEventListener('load', function () {
 		'mp3/taiko04.mp3',
 		'img/s100_sample.png'
 	);
-
-	// console.log("load assets midi");
-	// const midiData = game.assets['midi/001_Hatsune_Miku_Tell_Your_World_short.mid']
-	// const midi = new Midi(midiData)
 
 	game.onload = function () {
 		// 背景を生成
