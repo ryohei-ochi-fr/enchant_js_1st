@@ -1,6 +1,127 @@
 //おまじない
 enchant();
 
+// ローディング画面を上書き
+enchant.LoadingScene = enchant.Class.create(enchant.Scene, {
+	initialize: function () {
+		enchant.Scene.call(this);
+		this.backgroundColor = 'white';
+
+		// ローディングゲージ
+		var sprite = new Sprite(440, 200);
+		// Surfaceオブジェクトを生成しスプライトに連結
+		var surface = new Surface(440, 200);
+		sprite.image = surface;
+
+		// 四角形を描く
+		surface.context.fillStyle = "#82B1FF";
+		surface.context.fillRect(0, 0, 440, 200);
+		sprite.x = 100;
+		sprite.y = 80;
+
+		// ゲージ 縮小の原点
+		sprite.originX = 0;
+		sprite.originY = 0;
+		// ゲージ X方向の縮小
+		sprite.scaleX = 1;
+
+		this.addChild(sprite);
+
+		// こんなこと、いちいちやってられん	
+		// var font = '18px "Noto Sans JP",sans-serif';
+		// var width = 640;
+		// var label = new Label('produced by');
+		// label.font = font;
+		// label.textAlign = "center";
+		// label.width = width;
+		// label.x = 0;
+		// label.y = 0;
+		// this.addChild(label);
+
+		var stringAssets = [
+			// [0:string, 1:color, 2:aligin, 3:x, 4:y, 5:fontsize]
+			['produced by', '#606060', 'center', 0, 45, '18px'],
+			['Ashita', '#FFD600', 'left', 120, 100, '36px'],
+			['Karaage', '#FFFFFF', 'center', 0, 150, '64px'],
+			['wo', '#FFFFFF', 'left', 490, 190, '24px'],
+			['Tabetai', '#FFD600', 'left', 160, 230, '36px'],
+			['NOW LOADING...', '#606060', 'left', 400, 310, '18px'],
+			// パーセンテージは、textプロパティーを書き換えるので、一番最後に定義
+			['', '#606060', 'left', 560, 310, '18px'],
+		]
+		var font = ' ' + '"Noto Sans JP",sans-serif';
+		var width = 640;
+
+		var label;
+
+		stringAssets.forEach(asset => {
+			label = new Label(asset[0]);
+			label.color = asset[1];
+			label.textAlign = asset[2];
+			label.width = width;
+			label.x = asset[3];
+			label.y = asset[4];
+			label.font = asset[5] + font;
+			this.addChild(label);
+		});
+
+		var progress = 0;
+		var progressBefore = 0;
+		var offset = -0.2
+		this.addEventListener('progress', function (e) {
+			progressBefore = progress;
+			progress = e.loaded / e.total;
+		});
+
+		this.addEventListener('enterframe', function () {
+
+			var min = 1;
+			var max = 10 - progressBefore * 10;
+			label.text = Math.floor(progressBefore * 100) + '%';
+			// console.log(progressBefore, progress);
+			// ゲージが100%になる直前のアニメーション
+			// ↓ アホらしいバグ
+			// if (progress = 1) {
+			if (progress == 1) {
+				if (progress < progressBefore) {
+					progress = 0;
+				}else{
+					var effect = (Math.random() * max) / 100;
+					// console.log(effect);
+					sprite.scaleX = progressBefore + effect;
+				}
+
+				progressBefore += 0.001;
+			} else {
+				// ゲージをX方向に拡大していくアニメーション
+				if (progress > progressBefore) {
+					if(progressBefore < offset){
+						sprite.scaleX = progressBefore + offset;
+					}else{
+						sprite.scaleX = progressBefore;
+					}
+					progressBefore += 0.01;
+				}
+			}
+
+			// 100%になるところが描画されない
+			// 原因は、100%になるとloadイベントが発火して、ゲームに遷移するから(あたりまえ)
+
+		});
+
+		this.addEventListener('load', function (e) {
+			// nミリ秒後に画面遷移
+			setTimeout(function () {
+				var core = enchant.Core.instance;
+				core.removeScene(core.loadingScene);
+				core.dispatchEvent(e);
+			}, 3000);
+
+		});
+	}
+});
+
+
 //変数宣言
 var game;
 
@@ -10,23 +131,13 @@ addEventListener('load', function () {
 	var game = new Game(640, 360);
 	game.fps = 60;
 
-	game.LoadingScene = enchant.Class.create(enchant.Scene, {
-		initialize: function() {
-			enchant.Scene.call(this);
-			this.backgroundColor = 'red';
-			// ...
-			this.addEventListener('progress', function(e) {
-				progress = e.loaded / e.total;
-			});
-			this.addEventListener('enterframe', function() {
-				// animation
-			});
-		}
-	});
-
 	game.preload(
 		'mp3/taiko04.mp3',
-		'mp3/001_Hatsune_Miku_Tell_Your_World_short.mp3',
+		'https://natalie.davidovich-pompo.net/userdir/ochi/sandbox/loading/001_Hatsune_Miku_Tell_Your_World_short.mp3',
+		'https://natalie.davidovich-pompo.net/userdir/ochi/sandbox/loading/002_Hatsune_Miku_Tell_Your_World_short.mp3',
+		'https://natalie.davidovich-pompo.net/userdir/ochi/sandbox/loading/003_Hatsune_Miku_Tell_Your_World_short.mp3',
+		'https://natalie.davidovich-pompo.net/userdir/ochi/sandbox/loading/004_Hatsune_Miku_Tell_Your_World_short.mp3',
+		'https://natalie.davidovich-pompo.net/userdir/ochi/sandbox/loading/005_Hatsune_Miku_Tell_Your_World_short.mp3',
 		'img/s100_sample.png'
 	);
 
@@ -35,76 +146,6 @@ addEventListener('load', function () {
 		var bg = new Sprite(640, 360);
 		bg.image = game.assets['img/s100_sample.png'];
 		game.rootScene.addChild(bg);
-
-		// // イベントのログ表示
-		// var status = new Label("");
-		// status._log = [];
-		// status.add = function (str) {
-		// 	this._log.unshift(str);
-		// 	this._log = this._log.slice(0, 20);
-		// 	this.text = this._log.join('<br />');
-		// };
-
-		// var round = function (num) {
-		// 	return Math.round(num * 1e3) / 1e3;
-		// };
-
-		// game.rootScene.on('touchstart', function (evt) {
-		// 	status.add('touchstart (' + round(evt.x) + ', ' + round(evt.y) + ')');
-		// });
-		// game.rootScene.on('touchmove', function (evt) {
-		// 	status.add('touchmove (' + round(evt.x) + ', ' + round(evt.y) + ')');
-		// });
-		// game.rootScene.on('touchend', function (evt) {
-		// 	status.add('touchend (' + round(evt.x) + ', ' + round(evt.y) + ')');
-		// });
-
-		// game.rootScene.addChild(status);
-
-		// 譜面を描画
-		// スプライトを生成 300px x 63sec
-		var sprite1 = new Sprite(450, 18900 * 3);
-		// Surfaceオブジェクトを生成しスプライトに連結
-		var surface1 = new Surface(450, 18900 * 3);
-		sprite1.image = surface1;
-		game.rootScene.addChild(sprite1);
-
-		// ノーツを描く
-		surface1.context.fillStyle = "#B1CFFC";
-		// サーフェース左上
-		// surface.context.fillRect(0, 0, 149, 50);
-		// sprite.x = 95 + 1
-		
-		// surface1.context.fillRect(0, 18900 - 50, 149, 50);
-		// 譜面の初期位置
-		sprite1.x = 95 + 1
-		sprite1.y = 0 - 18900 * 3
-
-		var lane = 0
-		midiData.forEach(note => {
-			// midiの1音のデータ(ノーツ)を書き出してみる
-			// console.log(note.midi, note.time, note.duration, note.name);
-			// console.log(note[0] + ",", note[1]);
-			switch (note[0]) {
-				case 48:
-					lane = 0;
-					break;
-				case 50:
-					lane = 150;
-					break;
-				case 52:
-					lane = 300;
-					break;
-			}
-			timming = note[1] * 300 
-			console.log(timming + ",", lane);
-
-			surface1.context.fillStyle = "#B1CFFC";
-			surface1.context.fillRect(lane, 18900 * 3 - timming - 50, 149, 50);
-
-			// game.assets['mp3/001_Hatsune_Miku_Tell_Your_World_short.mp3'].play();
-
-		})
 
 		// 判定ゾーンを生成
 		var sprite = new Sprite(450, 50);
@@ -119,39 +160,11 @@ addEventListener('load', function () {
 		sprite.x = 95 + 1
 		sprite.y = 285
 
-		// var label = new Label('MidiPaeser');
-		// game.rootScene.addChild(label);
-		// game.rootScene.backgroundColor = '#ececec';
-
 		// タッチイベントを設定
 		sprite.addEventListener(Event.TOUCH_START, function (e) {
 			// 和太鼓どん
 			game.assets['mp3/taiko04.mp3'].play();
-			
-		});
 
-
-
-		var callFps = 0;
-		var callFlag = true;
-
-		sprite1.on('enterframe', function (evt) {
-			if(callFlag){
-				if(callFps > 60){
-					callFlag = false;
-					game.assets['mp3/001_Hatsune_Miku_Tell_Your_World_short.mp3'].play();
-				}
-			}
-			// this.y += 10 / 4;
-			this.y += 10 / 2;
-			// this.y += 10;
-			// this.y += 10 * 2;
-
-			if (this.y > 18900) {
-				this.y = 0;
-			}
-
-			callFps++
 		});
 
 	}
