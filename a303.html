@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>enchant.js 検証コード</title>
+  <link rel="stylesheet" href="css/a302.css">
+</head>
+
+<script type="text/javascript" src="inc/enchant.js"></script>
+<script type="text/javascript" src="js/a303.js"></script>
+<script src="//cdn.webrtc.ecl.ntt.com/skyway-4.4.3.js"></script>
+<!-- <script src="js/a303s.js"></script> -->
+
+<body>
+  <!-- <div class="container" style="visibility: hidden;"> -->
+  <div class="container">
+    <div class="room">
+      <div>
+        <!-- <video id="js-local-stream"></video> -->
+        <span id="js-room-mode"></span>:
+        <input type="text" placeholder="Room Name" id="js-room-id">
+        <button id="js-join-trigger">Join</button>
+        <button id="js-leave-trigger">Leave</button>
+      </div>
+
+      <div>
+        <pre class="messages" id="js-messages"></pre>
+        <input type="text" id="js-local-text">
+        <button id="js-send-trigger">Send</button>
+      </div>
+
+      <div class="remote-streams" id="js-remote-streams"></div>
+
+    </div>
+    <p class="meta" id="js-meta"></p>
+  </div>
+
+</body>
+
+</html>
