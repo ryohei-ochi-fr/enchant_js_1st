@@ -1,5 +1,10 @@
+// SkyWay TURN Server
+// const Peer = window.Peer;
 
 (async function main() {
+	const localVideo = document.getElementById('js-local-stream');
+	const remoteVideos = document.getElementById('js-remote-streams');
+
 	const localStream = await navigator.mediaDevices
 		.getUserMedia({
 			audio: true,
@@ -7,34 +12,18 @@
 		})
 		.catch(console.error);
 
-});
-
-//おまじない
-enchant();
-
-//変数宣言
-var game;
-
-
-
-//Webページが読み込まれたら
-addEventListener('load', function () {
-
-	const remoteVideos = document.getElementById('js-remote-streams');
-
 	// SkyWay TURN Server
 	const Peer = window.Peer;
-	var roomId = {
-		value: "debugroom"
-	};
-
-	// SkyWay TURN Server へ接続
-	peer = (window.peer = new Peer({
+	const peer = (window.peer = new Peer({
 		key: 'b78ac2d3-b7c3-4ccd-8a39-01b2b0ba9f74',
 		debug: 3,
 	}));
 
-	peer.on(Peer.EVENTS.open, () => {
+	var roomId = {
+		value: "debugroom"
+	};
+
+	peer.on('open', () => {
 
 		console.log("Peer.EVENTS.open");
 
@@ -82,8 +71,20 @@ addEventListener('load', function () {
 
 
 	});
+})();
 
-	// await wait(3); 
+//おまじない
+enchant();
+
+//変数宣言
+var game;
+
+
+
+//Webページが読み込まれたら
+addEventListener('load', function () {
+
+	// SkyWay TURN Server へ接続
 
 	//ゲームオブジェクトの作成
 	var game = new Game(640, 360);

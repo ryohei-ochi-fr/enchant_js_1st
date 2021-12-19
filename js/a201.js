@@ -134,10 +134,16 @@ addEventListener('load', function () {
 	game.preload(
 		'mp3/taiko04.mp3',
 		'https://natalie.davidovich-pompo.net/userdir/ochi/sandbox/loading/001_Hatsune_Miku_Tell_Your_World_short.mp3',
-		'https://natalie.davidovich-pompo.net/userdir/ochi/sandbox/loading/002_Hatsune_Miku_Tell_Your_World_short.mp3',
-		'https://natalie.davidovich-pompo.net/userdir/ochi/sandbox/loading/003_Hatsune_Miku_Tell_Your_World_short.mp3',
-		'https://natalie.davidovich-pompo.net/userdir/ochi/sandbox/loading/004_Hatsune_Miku_Tell_Your_World_short.mp3',
-		'https://natalie.davidovich-pompo.net/userdir/ochi/sandbox/loading/005_Hatsune_Miku_Tell_Your_World_short.mp3',
+		'https://natalie.davidovich-pompo.net/userdir/ochi/sandbox/loading/001_syaning_star.mp3',
+		'https://natalie.davidovich-pompo.net/userdir/ochi/sandbox/loading/002_still.mp3',
+		'https://natalie.davidovich-pompo.net/userdir/ochi/sandbox/loading/003_where_you_are.mp3',
+		'https://natalie.davidovich-pompo.net/userdir/ochi/sandbox/loading/004_harujion.mp3',
+		'https://natalie.davidovich-pompo.net/userdir/ochi/sandbox/loading/005_vegalost.mp3',
+		'https://natalie.davidovich-pompo.net/userdir/ochi/sandbox/loading/006_sekai_ga_bokurani_yurerumade.mp3',
+		// 'https://natalie.davidovich-pompo.net/userdir/ochi/sandbox/loading/002_Hatsune_Miku_Tell_Your_World_short.mp3',
+		// 'https://natalie.davidovich-pompo.net/userdir/ochi/sandbox/loading/003_Hatsune_Miku_Tell_Your_World_short.mp3',
+		// 'https://natalie.davidovich-pompo.net/userdir/ochi/sandbox/loading/004_Hatsune_Miku_Tell_Your_World_short.mp3',
+		// 'https://natalie.davidovich-pompo.net/userdir/ochi/sandbox/loading/005_Hatsune_Miku_Tell_Your_World_short.mp3',
 		'img/s100_sample.png'
 	);
 
